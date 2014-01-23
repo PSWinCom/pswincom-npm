@@ -1,6 +1,6 @@
 {
   "name": "pswincom-gateway",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "Send sms messages through PSWinCom Gateway",
   "main": "gateway.js",
   "scripts": {
@@ -16,7 +16,8 @@
     "pswincom"
   ],
   "dependencies": {
-    "xml2js": ">= 0.2.7"
+    "xml2js": ">= 0.2.7",
+    "encoding": ">= 0.1.7"
   },
   "author": "Henrik Grotle",
   "license": "BSD",

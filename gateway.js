@@ -1,5 +1,6 @@
 var http = require('https');
 var parsestring = require("xml2js").parseString;
+var encoding = require("encoding");
 
 exports.sendsms = function (user, password, sender, receivers, message, done, error) 
 {
@@ -8,7 +9,7 @@ exports.sendsms = function (user, password, sender, receivers, message, done, er
   for(i in receivers) {
     messagelist = messagelist + "    <MSG>" +
     "      <ID>" + (parseInt(i) + 1) + "</ID>" +
-    "      <TEXT>" + message + "</TEXT>" +
+    "      <TEXT>" + encoding.convert(message, "Latin_1") + "</TEXT>" +
     "      <SND>" + sender + "</SND>" +
     "      <RCV>" + receivers[i] + "</RCV>" +
     "    </MSG>";
