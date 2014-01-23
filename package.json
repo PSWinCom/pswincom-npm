@@ -1,0 +1,22 @@
+{
+  "name": "pswincom-gateway",
+  "version": "0.0.0",
+  "description": "Send sms messages through PSWinCom Gateway",
+  "main": "gateway.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/PSWinCom/pswincom-npm.git"
+  },
+  "keywords": [
+    "sms",
+    "gateway",
+    "pswincom"
+  ],
+  "author": "Henrik Grotle",
+  "license": "BSD",
+  "readmeFilename": "README.md",
+  "gitHead": "8d9b755149b1f5e5a62311a80d67421108195804"
+}
