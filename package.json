@@ -15,6 +15,9 @@
     "gateway",
     "pswincom"
   ],
+  "dependencies": {
+    "xml2js": ">= 0.2.7"
+  },
   "author": "Henrik Grotle",
   "license": "BSD",
   "readmeFilename": "README.md",
