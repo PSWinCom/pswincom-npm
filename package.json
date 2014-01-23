@@ -1,10 +1,10 @@
 {
   "name": "pswincom-gateway",
-  "version": "0.0.0",
+  "version": "1.0.0",
   "description": "Send sms messages through PSWinCom Gateway",
   "main": "gateway.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "node tests/test.js"
   },
   "repository": {
     "type": "git",
