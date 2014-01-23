@@ -1,4 +1,4 @@
-ar http = require('http');
+var http = require('https');
 var parsestring = require("xml2js").parseString;
 
 exports.sendsms = function (user, password, sender, receivers, message, done, error) 
@@ -25,9 +25,9 @@ exports.sendsms = function (user, password, sender, receivers, message, done, er
     "</SESSION>";
 
   var options = {
-    hostname: "https://gw2-fro.pswin.com",
-    path: "",
-    port: 8443,
+    hostname: process.env.PSW_GW_HOST || "gw2-fro.pswin.com",
+    path: process.env.PSW_GW_PATH || "",
+    port: process.env.PSW_GW_PORT || 8443,
     method: "POST",
     headers: { 
       "Content-Type": "text/xml",
@@ -44,8 +44,26 @@ exports.sendsms = function (user, password, sender, receivers, message, done, er
       });
       res.on('end', function() {
         parsestring(response, { explicitArray: false }, function(err, xml) {
-          if (typeof done === "function") 
-            done(xml.SESSION.MSGLST.MSG.STATUS);
+          if (typeof done === "function") { 
+            var result = { logon: null, receivers: {} };
+            if (xml.SESSION.LOGON)
+              result.logon = xml.SESSION.LOGON;
+            if (xml.SESSION.MSGLST)
+              if (xml.SESSION.MSGLST.MSG) {
+                var receiver, _i, _len;
+                if (receivers.length > 1) {
+                  for (_i = 0, _len = receivers.length; _i < _len; _i++) {
+                    receiver = receivers[_i];
+                    if (result.receivers[receiver])
+                      receiver = receiver + "(" + xml.SESSION.MSGLST.MSG[_i].ID + ")";
+                    result.receivers[receiver] = xml.SESSION.MSGLST.MSG[_i].STATUS;
+                  }
+                } else {
+                  result.receivers[receivers[0]] = xml.SESSION.MSGLST.MSG.STATUS;
+                }
+              }
+            done(result);
+          }
         });
       });
   });
