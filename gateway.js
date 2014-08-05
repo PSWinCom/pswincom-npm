@@ -1,29 +1,29 @@
 var http = require('https');
-var parsestring = require("xml2js").parseString;
+var xml2js = require("xml2js");
 var encoding = require("encoding");
 
 exports.sendsms = function (user, password, sender, receivers, message, done, error) 
 {
-  var messagelist = "";
-
-  for(i in receivers) {
-    messagelist = messagelist + "    <MSG>" +
-    "      <ID>" + (parseInt(i) + 1) + "</ID>" +
-    "      <TEXT>" + encoding.convert(message, "Latin_1") + "</TEXT>" +
-    "      <SND>" + sender + "</SND>" +
-    "      <RCV>" + receivers[i] + "</RCV>" +
-    "    </MSG>";
-  }
-
-  var body = 
-    "<?xml version=\"1.0\"?>" +
-    "<SESSION>" +
-    "  <CLIENT>" + user + "</CLIENT>" +
-    "  <PW>" + password + "</PW>" +
-    "  <MSGLST>" +
-    messagelist +
-    "  </MSGLST>" +
-    "</SESSION>";
+  var encodedMessage = "" + encoding.convert(message, "Latin_1");
+  
+  var requestModel = {
+    "SESSION": {
+      "CLIENT": user,
+      "PW": password,
+      "MSGLST": {
+        "MSG": receivers.map(function(rcv, i) {
+          return {
+            "ID": i+1,
+            "TEXT": encodedMessage,
+            "SND": sender,
+            "RCV": rcv
+          };
+        })
+      },
+    }
+  };
+  
+  var body = new xml2js.Builder({}).buildObject(requestModel);
 
   var options = {
     hostname: process.env.PSW_GW_HOST || "gw2-fro.pswin.com",
@@ -44,7 +44,7 @@ exports.sendsms = function (user, password, sender, receivers, message, done, er
         response += chunk;
       });
       res.on('end', function() {
-        parsestring(response, { explicitArray: false }, function(err, xml) {
+        xml2js.parsestring(response, { explicitArray: false }, function(err, xml) {
           if (typeof done === "function") { 
             var result = { logon: null, receivers: {} };
             if (xml.SESSION.LOGON)
