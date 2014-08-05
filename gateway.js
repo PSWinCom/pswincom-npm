@@ -2,6 +2,16 @@ var http = require('https');
 var xml2js = require("xml2js");
 var encoding = require("encoding");
 
+function date2timestamp(date) {
+  return [
+    date.getFullYear(), // YYYY
+    ('0' + (date.getMonth() + 1)).slice(-2), // MM
+    ('0' + date.getDate()).slice(-2), // DD
+    ('0' + date.getHours()).slice(-2), // HH
+    ('0' + date.getMinutes()).slice(-2), // mm 
+    ].join("");
+}
+
 function makeRequestXml(options) {
   options.message = "" + encoding.convert(options.message, "Latin_1");
   
@@ -21,6 +31,13 @@ function makeRequestXml(options) {
       },
     }
   };
+  
+  if (options.deliveryTime) {
+    var deliveryTimeStamp = date2timestamp(options.deliveryTime);
+    requestModel.SESSION.MSGLST.MSG.forEach(function(m) {
+      m.DELIVERYTIME = deliveryTimeStamp;
+    });
+  }
   
   return new xml2js.Builder({}).buildObject(requestModel);
 }
