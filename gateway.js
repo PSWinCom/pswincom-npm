@@ -25,6 +25,31 @@ function makeRequestXml(options) {
   return new xml2js.Builder({}).buildObject(requestModel);
 }
 
+function responseHandler(receivers, callback) {
+  return function (err, response) {
+    if (typeof callback !== "function") return;
+      
+    var result = { logon: null, receivers: {} };
+    if (response.SESSION.LOGON)
+      result.logon = response.SESSION.LOGON;
+    if (response.SESSION.MSGLST)
+      if (response.SESSION.MSGLST.MSG) {
+        var receiver, _i, _len;
+        if (receivers.length > 1) {
+          for (_i = 0, _len = receivers.length; _i < _len; _i++) {
+            receiver = receivers[_i];
+            if (result.receivers[receiver])
+              receiver = receiver + "(" + response.SESSION.MSGLST.MSG[_i].ID + ")";
+            result.receivers[receiver] = response.SESSION.MSGLST.MSG[_i].STATUS;
+          }
+        } else {
+          result.receivers[receivers[0]] = response.SESSION.MSGLST.MSG.STATUS;
+        }
+      }
+    callback(result);
+  };
+}
+
 exports.sendsms = function (user, password, sender, receivers, message, done, error) 
 {
   var body = makeRequestXml({
@@ -54,28 +79,7 @@ exports.sendsms = function (user, password, sender, receivers, message, done, er
         response += chunk;
       });
       res.on('end', function() {
-        xml2js.parseString(response, { explicitArray: false }, function(err, xml) {
-          if (typeof done === "function") { 
-            var result = { logon: null, receivers: {} };
-            if (xml.SESSION.LOGON)
-              result.logon = xml.SESSION.LOGON;
-            if (xml.SESSION.MSGLST)
-              if (xml.SESSION.MSGLST.MSG) {
-                var receiver, _i, _len;
-                if (receivers.length > 1) {
-                  for (_i = 0, _len = receivers.length; _i < _len; _i++) {
-                    receiver = receivers[_i];
-                    if (result.receivers[receiver])
-                      receiver = receiver + "(" + xml.SESSION.MSGLST.MSG[_i].ID + ")";
-                    result.receivers[receiver] = xml.SESSION.MSGLST.MSG[_i].STATUS;
-                  }
-                } else {
-                  result.receivers[receivers[0]] = xml.SESSION.MSGLST.MSG.STATUS;
-                }
-              }
-            done(result);
-          }
-        });
+        xml2js.parseString(response, { explicitArray: false }, responseHandler(receivers, done));
       });
   });
 
