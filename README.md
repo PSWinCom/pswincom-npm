@@ -58,5 +58,5 @@ in which case done and error are still optional
 
 When you pass your arguments as an object you may also add some extra arguments that are sometime usefull:
 
-* `deliveryTime` [Date object]
-* _more to come_
+* `deliveryTime` [Date object] for delayed delivery
+* _more to come..._
