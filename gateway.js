@@ -3,7 +3,7 @@ var xml2js = require("xml2js");
 var encoding = require("encoding");
 
 function makeRequestXml(options) {
-  options.text = "" + encoding.convert(options.text, "Latin_1");
+  options.message = "" + encoding.convert(options.message, "Latin_1");
   
   var requestModel = {
     "SESSION": {
@@ -13,7 +13,7 @@ function makeRequestXml(options) {
         "MSG": options.receivers.map(function(rcv, i) {
           return {
             "ID": i+1,
-            "TEXT": options.text,
+            "TEXT": options.message,
             "SND": options.sender,
             "RCV": rcv
           };
@@ -50,17 +50,10 @@ function responseHandler(receivers, callback) {
   };
 }
 
-exports.sendsms = function (user, password, sender, receivers, message, done, error) 
-{
-  var body = makeRequestXml({
-    user: user,
-    password: password,
-    sender: sender,
-    receivers: receivers,
-    text: message
-  });
+function privateSendSms(smsOptions) {
+  var body = makeRequestXml(smsOptions);
 
-  var options = {
+  var httpOptions = {
     hostname: process.env.PSW_GW_HOST || "gw2-fro.pswin.com",
     path: process.env.PSW_GW_PATH || "",
     port: process.env.PSW_GW_PORT || 8443,
@@ -73,21 +66,50 @@ exports.sendsms = function (user, password, sender, receivers, message, done, er
 
   var response = "";
 
-  var req = http.request(options, function(res) {
-      res.setEncoding('utf8');
-      res.on('data', function (chunk) {
-        response += chunk;
-      });
-      res.on('end', function() {
-        xml2js.parseString(response, { explicitArray: false }, responseHandler(receivers, done));
-      });
+  var req = http.request(httpOptions, function(res) {
+    res.setEncoding('utf8');
+    res.on('data', function (chunk) {
+      response += chunk;
+    });
+    res.on('end', function() {
+      xml2js.parseString(response, { explicitArray: false }, responseHandler(smsOptions.receivers, smsOptions.done));
+    });
   });
 
   req.on('error', function (e) {
-    if (typeof error === "function")
-      error(e);
+    if (typeof smsOptions.error === "function")
+      smsOptions.error(e);
   });
 
   req.write(body);
   req.end();
 }
+
+/***
+ * Calling options:
+ * 
+ *  sendsms(user, password, sender, receivers, message);
+ *  sendsms(user, password, sender, receivers, message, done);
+ *  sendsms(user, password, sender, receivers, message, done, error);
+ *  sendsms(args);
+ * 
+ **/
+var sendsms = function (user, password, sender, receivers, message, done, error) 
+{
+  if (arguments.length === 1)
+    privateSendSms(user);
+  else
+    privateSendSms({
+      user: user,
+      password: password,
+      sender: sender,
+      receivers: receivers,
+      message: message,
+      done: done,
+      error: error
+    });
+};
+
+exports.sendsms = sendsms;
+exports.sendSms = sendsms;
+exports.send_sms = sendsms;
