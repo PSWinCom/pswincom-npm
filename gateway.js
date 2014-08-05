@@ -2,20 +2,19 @@ var http = require('https');
 var xml2js = require("xml2js");
 var encoding = require("encoding");
 
-exports.sendsms = function (user, password, sender, receivers, message, done, error) 
-{
-  var encodedMessage = "" + encoding.convert(message, "Latin_1");
+function makeRequestXml(options) {
+  options.text = "" + encoding.convert(options.text, "Latin_1");
   
   var requestModel = {
     "SESSION": {
-      "CLIENT": user,
-      "PW": password,
+      "CLIENT": options.user,
+      "PW": options.password,
       "MSGLST": {
-        "MSG": receivers.map(function(rcv, i) {
+        "MSG": options.receivers.map(function(rcv, i) {
           return {
             "ID": i+1,
-            "TEXT": encodedMessage,
-            "SND": sender,
+            "TEXT": options.text,
+            "SND": options.sender,
             "RCV": rcv
           };
         })
@@ -23,7 +22,18 @@ exports.sendsms = function (user, password, sender, receivers, message, done, er
     }
   };
   
-  var body = new xml2js.Builder({}).buildObject(requestModel);
+  return new xml2js.Builder({}).buildObject(requestModel);
+}
+
+exports.sendsms = function (user, password, sender, receivers, message, done, error) 
+{
+  var body = makeRequestXml({
+    user: user,
+    password: password,
+    sender: sender,
+    receivers: receivers,
+    text: message
+  });
 
   var options = {
     hostname: process.env.PSW_GW_HOST || "gw2-fro.pswin.com",
@@ -44,7 +54,7 @@ exports.sendsms = function (user, password, sender, receivers, message, done, er
         response += chunk;
       });
       res.on('end', function() {
-        xml2js.parsestring(response, { explicitArray: false }, function(err, xml) {
+        xml2js.parseString(response, { explicitArray: false }, function(err, xml) {
           if (typeof done === "function") { 
             var result = { logon: null, receivers: {} };
             if (xml.SESSION.LOGON)
