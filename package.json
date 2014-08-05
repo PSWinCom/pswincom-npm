@@ -1,6 +1,6 @@
 {
   "name": "pswincom-gateway",
-  "version": "1.0.1",
+  "version": "1.1.0",
   "description": "Send sms messages through PSWinCom Gateway",
   "main": "gateway.js",
   "scripts": {
@@ -24,6 +24,5 @@
     {"name": "Torbjørn Marø"}
   ],
   "license": "BSD",
-  "readmeFilename": "README.md",
-  "gitHead": "8d9b755149b1f5e5a62311a80d67421108195804"
+  "readmeFilename": "README.md"
 }
