@@ -46,7 +46,7 @@ function responseHandler(receivers, callback) {
   return function (err, response) {
     if (typeof callback !== "function") return;
       
-    var result = { logon: null, receivers: {} };
+    var result = { logon: null, receivers: {}, refs: {} };
     if (response.SESSION.LOGON)
       result.logon = response.SESSION.LOGON;
     if (response.SESSION.MSGLST)
@@ -58,9 +58,11 @@ function responseHandler(receivers, callback) {
             if (result.receivers[receiver])
               receiver = receiver + "(" + response.SESSION.MSGLST.MSG[_i].ID + ")";
             result.receivers[receiver] = response.SESSION.MSGLST.MSG[_i].STATUS;
+            result.refs[receiver] = response.SESSION.MSGLST.MSG[_i].REF;
           }
         } else {
           result.receivers[receivers[0]] = response.SESSION.MSGLST.MSG.STATUS;
+          result.refs[receivers[0]] = response.SESSION.MSGLST.MSG.REF;
         }
       }
     callback(result);
