@@ -13,7 +13,6 @@ function date2timestamp(date) {
 }
 
 function makeRequestXml(options) {
-  options.message = "" + encoding.convert(options.message, "Latin_1");
   
   var requestModel = {
     "SESSION": {
@@ -70,7 +69,7 @@ function responseHandler(receivers, callback) {
 }
 
 function privateSendSms(smsOptions) {
-  var body = makeRequestXml(smsOptions);
+  var body =  encoding.convert(makeRequestXml(smsOptions), "Latin_1");;
 
   var httpOptions = {
     hostname: process.env.PSW_GW_HOST || "gw2-fro.pswin.com",
@@ -79,7 +78,7 @@ function privateSendSms(smsOptions) {
     method: "POST",
     headers: { 
       "Content-Type": "text/xml",
-      "Content-Length": Buffer.byteLength(body, "iso-8859-1")
+      "Content-Length": body.length
     }
   }
 
