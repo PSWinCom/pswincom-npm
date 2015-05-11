@@ -1,6 +1,6 @@
 {
   "name": "pswincom-gateway",
-  "version": "1.2.0",
+  "version": "1.3.0",
   "description": "Send sms messages through PSWinCom Gateway",
   "main": "gateway.js",
   "scripts": {
