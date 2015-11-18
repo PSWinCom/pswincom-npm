@@ -72,9 +72,9 @@ function privateSendSms(smsOptions) {
   var body =  encoding.convert(makeRequestXml(smsOptions), "Latin_1");;
 
   var httpOptions = {
-    hostname: process.env.PSW_GW_HOST || "gw2-fro.pswin.com",
+    hostname: process.env.PSW_GW_HOST || "xml.pswin.com",
     path: process.env.PSW_GW_PATH || "",
-    port: process.env.PSW_GW_PORT || 8443,
+    port: process.env.PSW_GW_PORT || 443,
     method: "POST",
     headers: { 
       "Content-Type": "text/xml",
