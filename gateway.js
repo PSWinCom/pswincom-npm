@@ -22,7 +22,7 @@ function makeRequestXml(options) {
         "MSG": options.receivers.map(function(rcv, i) {
           return {
             "ID": i+1,
-            "OP": options.operation,
+            "OP": options.operation || 1,
             "TEXT": options.message,
             "SND": options.sender,
             "RCV": rcv
