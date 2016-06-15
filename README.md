@@ -17,20 +17,20 @@ The module exposes a single function called `sendSms` (aliased to `send_sms` and
 
 #### 1) Required arguments directly
 
-    sendSms(user, passwd, sender, receivers, msg);
+    sendSms(user, passwd, sender, receivers, msg, operation);
 
 where `receivers` is an array of strings (phone numbers including country codes, with no leading zeros or plus sign).
 
 #### 2) Optionally add a success handler
 
-    sendSms(user, passwd, sender, receivers, msg,
+    sendSms(user, passwd, sender, receivers, msg, operation,
       function(result) {
         console.log(result);
       });
 
 #### 3) Optionally add an error handler
 
-    sendSms(user, passwd, sender, receivers, msg,
+    sendSms(user, passwd, sender, receivers, msg, operation
       function(result) {
         console.log("SMS result: ", result);
       },
@@ -47,7 +47,8 @@ in which case done and error are still optional
       password: "YOUR_PASSWORD", 
       sender: "YOUR_SENDER", 
       receivers: [ "RECEIVER_1" ], 
-      message: "A test message", 
+      message: "A test message",
+      operation: "OP",
       done: function(status) { 
         // ...
       }, 
