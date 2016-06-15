@@ -16,12 +16,16 @@
     "pswincom"
   ],
   "dependencies": {
-    "xml2js": ">= 0.4.0",
-    "encoding": ">= 0.1.7"
+    "encoding": "0.1.12",
+    "xml2js": "0.4.16"
   },
   "contributors": [
-    {"name": "Henrik Grotle"}, 
-    {"name": "Torbjørn Marø"}
+    {
+      "name": "Henrik Grotle"
+    },
+    {
+      "name": "Torbjørn Marø"
+    }
   ],
   "license": "BSD",
   "readmeFilename": "README.md"
