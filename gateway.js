@@ -70,7 +70,7 @@ function responseHandler(receivers, callback) {
 }
 
 function privateSendSms(smsOptions) {
-  var body =  encoding.convert(makeRequestXml(smsOptions), "Latin_1");;
+  var body =  encoding.convert(makeRequestXml(smsOptions), "Latin_1");
 
   var httpOptions = {
     hostname: process.env.PSW_GW_HOST || "xml.pswin.com",
@@ -108,8 +108,9 @@ function privateSendSms(smsOptions) {
  * Calling options:
  * 
  *  sendsms(user, password, sender, receivers, message);
- *  sendsms(user, password, sender, receivers, message, done);
- *  sendsms(user, password, sender, receivers, message, done, error);
+ *  sendsms(user, password, sender, receivers, message, operation);
+ *  sendsms(user, password, sender, receivers, message, operation, done);
+ *  sendsms(user, password, sender, receivers, message, operation, done, error);
  *  sendsms(args);
  * 
  **/
