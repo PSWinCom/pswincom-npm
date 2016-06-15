@@ -4,10 +4,11 @@ gateway.sendsms({
   password: "", 
   sender: "test", 
   receivers: [ "4711111111" ], 
-  message: "A test message", 
+  message: "A test message",
+  operation: 1,
   'done': function(status) { 
     console.log("Message sent with status: " + JSON.stringify(status));
-    process.exit(0); 
+    process.exit(0);
   }, 
   'error': function(error) {
     console.log("Error sending: " + error);
