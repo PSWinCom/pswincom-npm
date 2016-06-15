@@ -108,13 +108,12 @@ function privateSendSms(smsOptions) {
  * Calling options:
  * 
  *  sendsms(user, password, sender, receivers, message);
- *  sendsms(user, password, sender, receivers, message, operation);
- *  sendsms(user, password, sender, receivers, message, operation, done);
- *  sendsms(user, password, sender, receivers, message, operation, done, error);
+ *  sendsms(user, password, sender, receivers, message, done);
+ *  sendsms(user, password, sender, receivers, message, done, error);
  *  sendsms(args);
  * 
  **/
-var sendsms = function (user, password, sender, receivers, message, operation, done, error)
+var sendsms = function (user, password, sender, receivers, message, done, error)
 {
   if (arguments.length === 1)
     privateSendSms(user);
@@ -125,7 +124,6 @@ var sendsms = function (user, password, sender, receivers, message, operation, d
       sender: sender,
       receivers: receivers,
       message: message,
-      operation: operation,
       done: done,
       error: error
     });
