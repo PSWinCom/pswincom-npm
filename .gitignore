@@ -17,3 +17,8 @@ build
 node_modules
 .zedstate
 tags
+# IDE
+.idea
+
+# OS X
+.DS_Store
