@@ -25,6 +25,11 @@
     },
     {
       "name": "Torbjørn Marø"
+    },
+    {
+      "name": "Geir Gåsodden",
+      "email": "geir.gasodden@pythonia.no",
+      "url": "https://github.com/zrrrzzt"
     }
   ],
   "license": "BSD",
