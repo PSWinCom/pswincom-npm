@@ -22,6 +22,7 @@ function makeRequestXml(options) {
         "MSG": options.receivers.map(function(rcv, i) {
           return {
             "ID": i+1,
+            "OP": options.operation,
             "TEXT": options.message,
             "SND": options.sender,
             "RCV": rcv
@@ -112,7 +113,7 @@ function privateSendSms(smsOptions) {
  *  sendsms(args);
  * 
  **/
-var sendsms = function (user, password, sender, receivers, message, done, error) 
+var sendsms = function (user, password, sender, receivers, message, operation, done, error)
 {
   if (arguments.length === 1)
     privateSendSms(user);
@@ -123,6 +124,7 @@ var sendsms = function (user, password, sender, receivers, message, done, error)
       sender: sender,
       receivers: receivers,
       message: message,
+      operation: operation,
       done: done,
       error: error
     });
