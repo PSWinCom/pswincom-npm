@@ -17,20 +17,20 @@ The module exposes a single function called `sendSms` (aliased to `send_sms` and
 
 #### 1) Required arguments directly
 
-    sendSms(user, passwd, sender, receivers, msg, operation);
+    sendSms(user, passwd, sender, receivers, msg);
 
 where `receivers` is an array of strings (phone numbers including country codes, with no leading zeros or plus sign).
 
 #### 2) Optionally add a success handler
 
-    sendSms(user, passwd, sender, receivers, msg, operation,
+    sendSms(user, passwd, sender, receivers, msg,
       function(result) {
         console.log(result);
       });
 
 #### 3) Optionally add an error handler
 
-    sendSms(user, passwd, sender, receivers, msg, operation
+    sendSms(user, passwd, sender, receivers, msg,
       function(result) {
         console.log("SMS result: ", result);
       },
@@ -48,7 +48,6 @@ in which case done and error are still optional
       sender: "YOUR_SENDER", 
       receivers: [ "RECEIVER_1" ], 
       message: "A test message",
-      operation: "OP",
       done: function(status) { 
         // ...
       }, 
@@ -60,4 +59,5 @@ in which case done and error are still optional
 When you pass your arguments as an object you may also add some extra arguments that are sometime usefull:
 
 * `deliveryTime` [Date object] for delayed delivery
+* `operation` [Number] for operation to perform on message (useful for [unicode messages](https://wiki.pswin.com/Gateway%20XML%20API.ashx#Unicode_messages_26))
 * _more to come..._
