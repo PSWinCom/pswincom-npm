@@ -22,6 +22,7 @@ function makeRequestXml(options) {
         "MSG": options.receivers.map(function(rcv, i) {
           return {
             "ID": i+1,
+            "OP": options.operation || 1,
             "TEXT": options.message,
             "SND": options.sender,
             "RCV": rcv
@@ -69,7 +70,7 @@ function responseHandler(receivers, callback) {
 }
 
 function privateSendSms(smsOptions) {
-  var body =  encoding.convert(makeRequestXml(smsOptions), "Latin_1");;
+  var body =  encoding.convert(makeRequestXml(smsOptions), "Latin_1");
 
   var httpOptions = {
     hostname: process.env.PSW_GW_HOST || "xml.pswin.com",
@@ -112,7 +113,7 @@ function privateSendSms(smsOptions) {
  *  sendsms(args);
  * 
  **/
-var sendsms = function (user, password, sender, receivers, message, done, error) 
+var sendsms = function (user, password, sender, receivers, message, done, error)
 {
   if (arguments.length === 1)
     privateSendSms(user);

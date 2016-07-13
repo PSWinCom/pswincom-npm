@@ -47,7 +47,7 @@ in which case done and error are still optional
       password: "YOUR_PASSWORD", 
       sender: "YOUR_SENDER", 
       receivers: [ "RECEIVER_1" ], 
-      message: "A test message", 
+      message: "A test message",
       done: function(status) { 
         // ...
       }, 
@@ -59,4 +59,5 @@ in which case done and error are still optional
 When you pass your arguments as an object you may also add some extra arguments that are sometime usefull:
 
 * `deliveryTime` [Date object] for delayed delivery
+* `operation` [Number] for operation to perform on message (useful for [unicode messages](https://wiki.pswin.com/Gateway%20XML%20API.ashx#Unicode_messages_26))
 * _more to come..._
